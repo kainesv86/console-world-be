@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { joiPasswordExtendCore, JoiPasswordExtend } from 'joi-password';
 import * as joi from 'joi';
+import { Address } from './address';
 
 const joiPassword: JoiPasswordExtend = joi.extend(joiPasswordExtendCore);
 
@@ -33,12 +34,16 @@ export class User {
     email: string;
 
     @ApiProperty({ description: 'Is verify' })
-    @Column({ default: false })
+    @Column({ default: true })
     isVerified: boolean;
 
     @ApiProperty({ description: 'Google id' })
     @Column({ default: null, unique: true })
     googleId: string;
+
+    @ApiProperty({ description: 'Address' })
+    @Column({ default: null, unique: true })
+    address: string;
 
     @ApiProperty({ description: 'Create date' })
     createAt: number;
@@ -53,6 +58,9 @@ export class User {
     @ApiProperty({ description: 'Status' })
     @Column({ default: UserRole.USER })
     role: UserRole;
+
+    @OneToMany(() => Address, (address) => address.user)
+    addresses: Address[];
 }
 
 export const userValidateSchema = {

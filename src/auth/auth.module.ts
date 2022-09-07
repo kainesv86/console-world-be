@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtService } from '@nestjs/jwt';
 import { UserModule } from '../user/user.module';
-import { GoogleStrategy } from './passport/google.strategy';
+// import { GoogleStrategy } from './passport/google.strategy';
 import { config } from '../core';
 import { EmailModule } from '../core/providers';
 
@@ -12,7 +12,7 @@ import { EmailModule } from '../core/providers';
     controllers: [AuthController],
     providers: [
         AuthService,
-        GoogleStrategy,
+        // GoogleStrategy,
 
         {
             provide: JwtService,

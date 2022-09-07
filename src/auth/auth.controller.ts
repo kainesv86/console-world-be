@@ -93,16 +93,16 @@ export class AuthController {
     }
 
     // ---------------------------3rd authentication---------------------------
-    @Get('/google')
-    @UseGuards(AuthGuard('google'))
-    cGoogleAuth() {
-        //
-    }
+    // @Get('/google')
+    // @UseGuards(AuthGuard('google'))
+    // cGoogleAuth() {
+    //     //
+    // }
 
-    @Get('/google/callback')
-    @UseGuards(AuthGuard('google'))
-    async cGoogleAuthRedirect(@Req() req: Request, @Res() res: Response) {
-        const accessToken = await this.authService.createAccessToken(req.user as User);
-        return res.cookie(constant.authController.tokenName, accessToken, { maxAge: constant.authController.googleUserCookieTime }).redirect(config.GOOGLE_CLIENT_REDIRECT_URL);
-    }
+    // @Get('/google/callback')
+    // @UseGuards(AuthGuard('google'))
+    // async cGoogleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    //     const accessToken = await this.authService.createAccessToken(req.user as User);
+    //     return res.cookie(constant.authController.tokenName, accessToken, { maxAge: constant.authController.googleUserCookieTime }).redirect(config.GOOGLE_CLIENT_REDIRECT_URL);
+    // }
 }
