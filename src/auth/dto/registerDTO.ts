@@ -3,16 +3,16 @@ import { ApiProperty } from '@nestjs/swagger';
 import { userValidateSchema } from '../../core/models';
 
 export class RegisterDTO {
-    @ApiProperty({ description: 'Username', example: 'haicao@gmail.com' })
+    @ApiProperty({ description: 'Username', example: 'kainesv86@gmail.com' })
     email: string;
 
-    @ApiProperty({ description: 'Name', example: 'Cao Chi Hai' })
+    @ApiProperty({ description: 'Name', example: 'Pham Vinh Tai' })
     name: string;
 
-    @ApiProperty({ description: 'Password', example: 'Aa123456' })
+    @ApiProperty({ description: 'Password', example: '123456Aa' })
     password: string;
 
-    @ApiProperty({ description: 'Confirm password', example: 'Aa123456' })
+    @ApiProperty({ description: 'Confirm password', example: '123456Aa' })
     confirmPassword: string;
 }
 

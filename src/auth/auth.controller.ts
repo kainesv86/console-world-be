@@ -77,6 +77,7 @@ export class AuthController {
     @UsePipes(new JoiValidatorPipe(vLoginDTO))
     async cLogin(@Body() body: LoginDTO, @Res() res: Response) {
         const user = await this.userService.findOne('email', body.email);
+        console.log(body);
         if (!user) throw new HttpException({ errorMessage: 'error.invalid-password-username' }, StatusCodes.BAD_REQUEST);
 
         const isCorrectPassword = await this.authService.decryptPassword(body.password, user.password);
