@@ -1,4 +1,5 @@
 export enum ResponseMessage {
+    INVALID_CURRENT_PASSWORD = 'Invalid current password',
     INVALID_CONFIRM_PASSWORD = 'Confirm password should match with password',
     NOT_EXISTED_USER = 'Invalid user',
     SOMETHING_WRONG = 'Something went wrong',

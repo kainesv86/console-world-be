@@ -2,6 +2,7 @@ import { Body, Controller, Get, HttpException, Param, Put, Query, Req, Res, UseG
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { ResponseMessage } from 'src/core/interface';
 import { AuthGuard } from '../auth/auth.guard';
 import { AuthService } from '../auth/auth.service';
 import { constant } from '../core';
@@ -27,7 +28,7 @@ export class UserController {
     @Get('/:userId')
     async cGetOneById(@Param('userId') userId: string, @Res() res: Response) {
         const user = await this.userService.findOne('id', userId);
-        if (!user) throw new HttpException({ errorMessage: 'error.not_found' }, StatusCodes.NOT_FOUND);
+        if (!user) throw new HttpException({ errorMessage: ResponseMessage.NOT_EXISTED_USER }, StatusCodes.NOT_FOUND);
         return res.send(user);
     }
 
@@ -40,7 +41,7 @@ export class UserController {
         //check current input value is correct or not
         const isCorrectPassword = await this.authService.decryptPassword(body.currentPassword, user.password);
         if (!isCorrectPassword) {
-            throw new HttpException({ errorMessage: 'error.invalid_current_password' }, StatusCodes.BAD_REQUEST);
+            throw new HttpException({ errorMessage: ResponseMessage.INVALID_PASSWORD }, StatusCodes.BAD_REQUEST);
         }
         //change password to new password
         user.password = await this.authService.encryptPassword(body.newPassword, constant.default.hashingSalt);
