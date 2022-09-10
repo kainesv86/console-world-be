@@ -64,7 +64,7 @@ export class AuthController {
     @UsePipes(new JoiValidatorPipe(vRegisterDTO))
     async cRegister(@Body() body: RegisterDTO, @Res() res: Response) {
         const existedUser = await this.userService.findOne('email', body.email);
-        if (existedUser) throw new HttpException({ email: 'field.field-taken' }, StatusCodes.BAD_REQUEST);
+        if (existedUser) throw new HttpException({ email: 'Email is already exists' }, StatusCodes.BAD_REQUEST);
         const newUser = await this.authService.createOne(body.name, body.email, body.password);
 
         const accessToken = await this.authService.createAccessToken(newUser);

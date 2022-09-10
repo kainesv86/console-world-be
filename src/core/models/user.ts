@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { joiPasswordExtendCore, JoiPasswordExtend } from 'joi-password';
 import * as joi from 'joi';
 import { Address } from './address';
+import JoiMessage from 'joi-message';
 
 const joiPassword: JoiPasswordExtend = joi.extend(joiPasswordExtendCore);
 
@@ -30,7 +31,7 @@ export class User {
     password: string;
 
     @ApiProperty({ description: 'Email' })
-    @Column({ default: null })
+    @Column({ default: null, unique: true })
     email: string;
 
     @ApiProperty({ description: 'Is verify' })
@@ -64,8 +65,36 @@ export class User {
 }
 
 export const userValidateSchema = {
-    name: joi.string().min(5).max(40).trim().lowercase().required(),
-    email: joi.string().min(5).max(255).email().trim().lowercase().required(),
-    username: joi.string().max(32).min(5).lowercase().alphanum().required(),
-    password: joiPassword.string().min(8).max(32).noWhiteSpaces().required(),
+    name: joi
+        .string()
+        .min(5)
+        .max(40)
+        .trim()
+        .lowercase()
+        .required()
+        .messages(JoiMessage.createStringMessages({ field: 'Full name', min: 5, max: 40 })),
+    email: joi
+        .string()
+        .min(5)
+        .max(255)
+        .email()
+        .trim()
+        .lowercase()
+        .required()
+        .messages(JoiMessage.createStringMessages({ field: 'Email', min: 5, max: 255 })),
+    username: joi
+        .string()
+        .max(32)
+        .min(5)
+        .lowercase()
+        .alphanum()
+        .required()
+        .messages(JoiMessage.createStringMessages({ field: 'Username', min: 5, max: 32 })),
+    password: joiPassword
+        .string()
+        .min(8)
+        .max(32)
+        .noWhiteSpaces()
+        .required()
+        .messages(JoiMessage.createStringMessages({ field: 'Password', min: 8, max: 32 })),
 };

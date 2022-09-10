@@ -1,6 +1,8 @@
 import * as joi from 'joi';
 import { ApiProperty } from '@nestjs/swagger';
 import { userValidateSchema } from '../../core/models';
+import JoiMessage from 'joi-message';
+import { ResponseMessage } from 'src/core/interface';
 
 export class RegisterDTO {
     @ApiProperty({ description: 'Username', example: 'kainesv86@gmail.com' })
@@ -20,5 +22,9 @@ export const vRegisterDTO = joi.object<RegisterDTO>({
     name: userValidateSchema.name,
     email: userValidateSchema.email,
     password: userValidateSchema.password,
-    confirmPassword: joi.string().required().valid(joi.ref('password')),
+    confirmPassword: joi
+        .string()
+        .required()
+        .valid(joi.ref('password'))
+        .messages({ ...JoiMessage.createStringMessages({ field: 'Confirm password' }), 'any.only': ResponseMessage.INVALID_CONFIRM_PASSWORD }),
 });
