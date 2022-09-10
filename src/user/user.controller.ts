@@ -15,7 +15,7 @@ import { UserService } from './user.service';
 @ApiBearerAuth()
 @Controller(UserController.endPoint)
 export class UserController {
-    static endPoint = '/api/users';
+    static endPoint = '/api/user';
 
     constructor(private readonly userService: UserService, private readonly authService: AuthService) {}
 
@@ -23,13 +23,6 @@ export class UserController {
     @UseGuards(AuthGuard)
     async cGetMe(@Req() req: Request, @Res() res: Response) {
         return res.send(req.user);
-    }
-
-    @Get('/:userId')
-    async cGetOneById(@Param('userId') userId: string, @Res() res: Response) {
-        const user = await this.userService.findOne('id', userId);
-        if (!user) throw new HttpException({ errorMessage: ResponseMessage.NOT_EXISTED_USER }, StatusCodes.NOT_FOUND);
-        return res.send(user);
     }
 
     @Put('/password')
@@ -57,6 +50,8 @@ export class UserController {
         const user = await this.userService.findOne('id', req.user.id);
         // update field
         user.name = body.name;
+        console.log(body);
+        user.phone = body.phone;
         await this.userService.updateOne(user);
         return res.send();
     }

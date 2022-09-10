@@ -41,6 +41,7 @@ describe('UserController', () => {
                 const getUser = fakeUser();
                 updateUser = {
                     name: fakeData(10, 'lettersAndNumbersLowerCase'),
+                    phone: fakeData(10, 'number'),
                 };
                 await userService.updateOne(getUser);
                 token = await authService.createAccessToken(getUser);
@@ -106,7 +107,7 @@ describe('UserController', () => {
 
             beforeEach(async () => {
                 getUser = fakeUser();
-                newData = { name: fakeUser().name };
+                newData = { name: fakeUser().name, phone: fakeUser().phone };
 
                 await userService.updateOne(getUser);
                 token = await authService.createAccessToken(getUser);
