@@ -64,7 +64,7 @@ export class AuthController {
     @UsePipes(new JoiValidatorPipe(vRegisterDTO))
     async cRegister(@Body() body: RegisterDTO, @Res() res: Response) {
         const existedUser = await this.userService.findOne('email', body.email);
-        if (existedUser) throw new HttpException({ email: 'field.field-taken' }, StatusCodes.BAD_REQUEST);
+        if (existedUser) throw new HttpException({ email: 'Email is already exists' }, StatusCodes.BAD_REQUEST);
         const newUser = await this.authService.createOne(body.name, body.email, body.password);
 
         const accessToken = await this.authService.createAccessToken(newUser);
@@ -77,6 +77,7 @@ export class AuthController {
     @UsePipes(new JoiValidatorPipe(vLoginDTO))
     async cLogin(@Body() body: LoginDTO, @Res() res: Response) {
         const user = await this.userService.findOne('email', body.email);
+        console.log(body);
         if (!user) throw new HttpException({ errorMessage: 'error.invalid-password-username' }, StatusCodes.BAD_REQUEST);
 
         const isCorrectPassword = await this.authService.decryptPassword(body.password, user.password);
