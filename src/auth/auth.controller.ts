@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { config } from '../core';
 import { constant } from '../core/constant';
-import { JwtToken } from '../core/interface';
+import { JwtToken, ResponseMessage } from '../core/interface';
 import { User } from '../core/models';
 import { JoiValidatorPipe } from '../core/pipe/validator.pipe';
 import { EmailService } from '../core/providers';
@@ -20,43 +20,43 @@ export class AuthController {
 
     constructor(private readonly authService: AuthService, private readonly userService: UserService, private readonly emailService: EmailService) {}
 
-    @Post('/verify-email')
-    @UsePipes(new JoiValidatorPipe(vRequestVerifyEmailDTO))
-    async cSendVerifyEmail(@Body() body: RequestVerifyEmailDTO, @Res() res: Response) {
-        const user = await this.userService.findOne('email', body.email);
+    // @Post('/verify-email')
+    // @UsePipes(new JoiValidatorPipe(vRequestVerifyEmailDTO))
+    // async cSendVerifyEmail(@Body() body: RequestVerifyEmailDTO, @Res() res: Response) {
+    //     const user = await this.userService.findOne('email', body.email);
 
-        if (!user) {
-            throw new HttpException({ errorMessage: 'error.not_found' }, StatusCodes.BAD_REQUEST);
-        }
+    //     if (!user) {
+    //         throw new HttpException({ errorMessage: 'error.not_found' }, StatusCodes.BAD_REQUEST);
+    //     }
 
-        const otp = await this.authService.createAccessToken(user, 5);
+    //     const otp = await this.authService.createAccessToken(user, 5);
 
-        const isSend = await this.emailService.sendEmailForVerify(user.email, otp);
+    //     const isSend = await this.emailService.sendEmailForVerify(user.email, otp);
 
-        if (!isSend) {
-            throw new HttpException({ errorMessage: 'error.something_wrong' }, StatusCodes.INTERNAL_SERVER_ERROR);
-        }
+    //     if (!isSend) {
+    //         throw new HttpException({ errorMessage: ResponseMessage.SOMETHING_WRONG }, StatusCodes.INTERNAL_SERVER_ERROR);
+    //     }
 
-        return res.send();
-    }
+    //     return res.send();
+    // }
 
-    @Get('/verify-email/:otp')
-    async cVerifyEmail(@Param('otp') otp: string, @Res() res: Response) {
-        const { data, error } = await this.authService.verifyToken<JwtToken>(otp);
-        if (error) {
-            throw new HttpException({ errorMessage: '' }, StatusCodes.UNAUTHORIZED);
-        }
+    // @Get('/verify-email/:otp')
+    // async cVerifyEmail(@Param('otp') otp: string, @Res() res: Response) {
+    //     const { data, error } = await this.authService.verifyToken<JwtToken>(otp);
+    //     if (error) {
+    //         throw new HttpException({ errorMessage: '' }, StatusCodes.UNAUTHORIZED);
+    //     }
 
-        const user = await this.userService.findOne('id', data.id);
-        if (!user) {
-            throw new HttpException({ errorMessage: '' }, StatusCodes.UNAUTHORIZED);
-        }
+    //     const user = await this.userService.findOne('id', data.id);
+    //     if (!user) {
+    //         throw new HttpException({ errorMessage: '' }, StatusCodes.UNAUTHORIZED);
+    //     }
 
-        user.isVerified = true;
-        await this.userService.updateOne(user);
+    //     user.isVerified = true;
+    //     await this.userService.updateOne(user);
 
-        return res.send();
-    }
+    //     return res.send();
+    // }
 
     @Post('/register')
     @ApiOperation({ summary: 'Create new user' })
@@ -64,7 +64,7 @@ export class AuthController {
     @UsePipes(new JoiValidatorPipe(vRegisterDTO))
     async cRegister(@Body() body: RegisterDTO, @Res() res: Response) {
         const existedUser = await this.userService.findOne('email', body.email);
-        if (existedUser) throw new HttpException({ email: 'Email is already exists' }, StatusCodes.BAD_REQUEST);
+        if (existedUser) throw new HttpException({ email: ResponseMessage.EMAIL_TAKEN }, StatusCodes.BAD_REQUEST);
         const newUser = await this.authService.createOne(body.name, body.email, body.password);
 
         const accessToken = await this.authService.createAccessToken(newUser);
@@ -78,13 +78,13 @@ export class AuthController {
     async cLogin(@Body() body: LoginDTO, @Res() res: Response) {
         const user = await this.userService.findOne('email', body.email);
         console.log(body);
-        if (!user) throw new HttpException({ errorMessage: 'error.invalid-password-username' }, StatusCodes.BAD_REQUEST);
+        if (!user) throw new HttpException({ errorMessage: ResponseMessage.INVALID_EMAIL_PASSWORD }, StatusCodes.BAD_REQUEST);
 
         const isCorrectPassword = await this.authService.decryptPassword(body.password, user.password);
-        if (!isCorrectPassword) throw new HttpException({ errorMessage: 'error.invalid-password-username' }, StatusCodes.BAD_REQUEST);
+        if (!isCorrectPassword) throw new HttpException({ errorMessage: ResponseMessage.INVALID_EMAIL_PASSWORD }, StatusCodes.BAD_REQUEST);
 
         const accessToken = await this.authService.createAccessToken(user);
-        return res.cookie(constant.authController.tokenName, accessToken, { maxAge: constant.authController.loginCookieTime }).send({ token: accessToken });
+        return res.cookie(constant.authController.tokenName, accessToken, { maxAge: constant.authController.loginCookieTime }).send(accessToken);
     }
 
     @Post('/logout')

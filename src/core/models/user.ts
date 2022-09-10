@@ -4,6 +4,7 @@ import { joiPasswordExtendCore, JoiPasswordExtend } from 'joi-password';
 import * as joi from 'joi';
 import { Address } from './address';
 import JoiMessage from 'joi-message';
+import { ResponseMessage } from '../interface';
 
 const joiPassword: JoiPasswordExtend = joi.extend(joiPasswordExtendCore);
 
@@ -33,6 +34,10 @@ export class User {
     @ApiProperty({ description: 'Email' })
     @Column({ default: null, unique: true })
     email: string;
+
+    @ApiProperty({ description: 'Phone' })
+    @Column({ default: null })
+    phone: string;
 
     @ApiProperty({ description: 'Is verify' })
     @Column({ default: true })
@@ -70,7 +75,6 @@ export const userValidateSchema = {
         .min(5)
         .max(40)
         .trim()
-        .lowercase()
         .required()
         .messages(JoiMessage.createStringMessages({ field: 'Full name', min: 5, max: 40 })),
     email: joi
@@ -97,4 +101,11 @@ export const userValidateSchema = {
         .noWhiteSpaces()
         .required()
         .messages(JoiMessage.createStringMessages({ field: 'Password', min: 8, max: 32 })),
+    phone: joi
+        .string()
+        .min(10)
+        .max(11)
+        .pattern(/^[0-9]+$/)
+        .required()
+        .messages({ ...JoiMessage.createStringMessages({ field: 'Phone number', min: 10, max: 11 }), 'string.pattern.base': ResponseMessage.INVALID_PHONE }),
 };
