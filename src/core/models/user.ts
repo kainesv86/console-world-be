@@ -5,6 +5,7 @@ import * as joi from 'joi';
 import { Address } from './address';
 import JoiMessage from 'joi-message';
 import { ResponseMessage } from '../interface';
+import { Expose } from 'class-transformer';
 
 const joiPassword: JoiPasswordExtend = joi.extend(joiPasswordExtendCore);
 
@@ -25,6 +26,7 @@ export class User {
 
     @ApiProperty({ description: 'Name' })
     @Column({ default: null })
+    @Expose()
     name: string;
 
     @ApiProperty({ description: 'Password' })
@@ -33,10 +35,12 @@ export class User {
 
     @ApiProperty({ description: 'Email' })
     @Column({ default: null, unique: true })
+    @Expose()
     email: string;
 
     @ApiProperty({ description: 'Phone' })
     @Column({ default: null })
+    @Expose()
     phone: string;
 
     @ApiProperty({ description: 'Is verify' })
@@ -46,10 +50,6 @@ export class User {
     @ApiProperty({ description: 'Google id' })
     @Column({ default: null, unique: true })
     googleId: string;
-
-    @ApiProperty({ description: 'Address' })
-    @Column({ default: null, unique: true })
-    address: string;
 
     @ApiProperty({ description: 'Create date' })
     createAt: number;

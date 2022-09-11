@@ -27,7 +27,7 @@ export class AuthService {
         user.name = name;
         user.email = email;
         user.password = await this.encryptPassword(password, constant.default.hashingSalt);
-        user.isVerified = false;
+        user.isVerified = true;
         user.createAt = new Date().getTime();
         user.updateAt = new Date().getTime();
         user.status = UserStatus.ACTIVE;

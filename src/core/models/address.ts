@@ -9,10 +9,14 @@ export class Address {
     id: string;
 
     @ApiProperty({ description: 'Address' })
-    @Column({ default: null, unique: true })
-    address: string;
+    @Column({ nullable: false })
+    location: string;
+
+    @ApiProperty({ description: 'Phone' })
+    @Column({ nullable: false })
+    phone: string;
 
     @ApiProperty({ description: 'User Id' })
-    @ManyToOne(() => User, (user) => user.address)
+    @ManyToOne(() => User, (user) => user.addresses)
     user: User;
 }
