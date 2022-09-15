@@ -19,6 +19,10 @@ export class Address {
     @Column({ nullable: false })
     phone: string;
 
+    @ApiProperty({ description: 'Default address' })
+    @Column({ default: false })
+    isDefault: boolean;
+
     @ApiProperty({ description: 'User Id' })
     @ManyToOne(() => User, (user) => user.addresses)
     user: User;
@@ -38,4 +42,5 @@ export const addressValidateSchema = {
         .pattern(/^[0-9]+$/)
         .required()
         .messages({ ...JoiMessage.createStringMessages({ field: 'Phone number', min: 10, max: 11 }), 'string.pattern.base': ResponseMessage.INVALID_PHONE }),
+    isDefault: joi.boolean().required(),
 };
