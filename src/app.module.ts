@@ -5,8 +5,10 @@ import { DbModule } from './module.config';
 import { UserModule } from './user/user.module';
 import { AddressModule } from './address/address.module';
 import { ProductCategoryModule } from './product-category/product-category.module';
+import { ProductModule } from './product/product.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-    imports: [DbModule, UserModule, AuthModule, AddressModule, ProductCategoryModule],
+    imports: [ConfigModule.forRoot(), DbModule, UserModule, AuthModule, AddressModule, ProductCategoryModule, ProductModule],
 })
 export class AppModule {}

@@ -2,6 +2,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from './core';
 import { User } from './core/models';
 import { Address } from './core/models/address';
+import { Product } from './core/models/product';
 import { ProductCategory } from './core/models/product-category';
 
 export const DbModule = TypeOrmModule.forRoot({
@@ -13,6 +14,6 @@ export const DbModule = TypeOrmModule.forRoot({
     database: config.DB_NAME,
     synchronize: true,
     keepConnectionAlive: true,
-    entities: [User, Address, ProductCategory],
+    entities: [User, Address, ProductCategory, Product],
     extra: { connectionLimit: 1 },
 });

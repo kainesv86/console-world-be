@@ -26,4 +26,8 @@ export const config = {
     PORT: Number(process.env.PORT) || 4000,
     NODE_ENV: process.env.NODE_ENV || monoEnum.NODE_ENV_MODE.DEVELOPMENT,
     DEBUG: process.env.DEBUG || '',
+
+    FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID || '',
+    FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY || '',
+    FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL || '',
 };
