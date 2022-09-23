@@ -7,6 +7,7 @@ export class UpdateUserDTO {
 
     @ApiProperty({ description: 'Phone', example: '0123456789' })
     phone: string;
+
 }
 
 export const vUpdateUserDTO = joi.object<UpdateUserDTO>({

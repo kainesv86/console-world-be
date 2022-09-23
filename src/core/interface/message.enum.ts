@@ -19,4 +19,5 @@ export enum ResponseMessage {
     DUPLICATED_CATEGORY = 'This category has already existed',
     DUPLICATED_ORDER = 'Order has already existed',
     ACTION_NOT_ALLOW = 'This action is not allowed',
+    INVALID_CATEGORIES = 'Invalid categories',
 }

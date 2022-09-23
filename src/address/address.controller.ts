@@ -80,34 +80,28 @@ export class AddressController {
         return res.send(result);
     }
 
-    @Patch('/:id')
+    @Put('/default/:id')
     @ApiParam({ name: 'id', example: '4042bde3-6017-4ea6-bc81-91b9d80d6bf6' })
     @UseGuards(AuthGuard)
     @ApiOperation({ summary: 'Set default address by user' })
     async cSetDefaultAddress(@Req() req: Request, @Res() res: Response, @Param('id') id: string) {
-        const newDefaultAddress = await this.addressService.getAddressByField('id', id);
+        const addresses = await this.addressService.getAddresses(req.user);
 
-        if (!newDefaultAddress) {
+        const address = addresses.find((address) => address.id === id);
+
+        if (!address) {
             throw new HttpException({ errorMessage: ResponseMessage.NOT_FOUND }, StatusCodes.NOT_FOUND);
         }
 
-        if (newDefaultAddress.user.id !== req.user.id) {
-            throw new HttpException({ errorMessage: ResponseMessage.UNAUTHORIZED }, StatusCodes.UNAUTHORIZED);
-        }
-
-        const addresses = await this.addressService.getAddresses(req.user);
-        let setNewAddresses: Address[] = [];
         addresses.forEach((address) => {
-            address.isDefault = false;
-            setNewAddresses = [...setNewAddresses, address];
+            if (address.id !== id) {
+                return (address.isDefault = false);
+            }
+            address.isDefault = true;
         });
 
-        this.addressService.saveAddresses(setNewAddresses);
-
-        newDefaultAddress.isDefault = true;
-
-        newDefaultAddress.isDefault = true;
-        const result = this.addressService.saveAddress(newDefaultAddress);
+        console.log(addresses);
+        const result = this.addressService.saveAddresses(addresses);
         return res.send(result);
     }
 }

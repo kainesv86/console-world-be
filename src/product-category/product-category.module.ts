@@ -14,5 +14,6 @@ import { UserModule } from 'src/user/user.module';
         ProductCategoryService,
         { provide: ProductCategoryRepository, useFactory: (connection: Connection) => connection.getCustomRepository(ProductCategoryRepository), inject: [Connection] },
     ],
+    exports:[ProductCategoryService]
 })
 export class ProductCategoryModule {}

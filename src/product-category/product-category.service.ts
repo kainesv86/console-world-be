@@ -21,4 +21,8 @@ export class ProductCategoryService {
         }
         return query.getMany();
     }
+
+    async findMany(ids: string[]): Promise<ProductCategory[]> {
+        return this.productCategoryBuilder.whereInIds(ids).getMany();
+    }
 }
