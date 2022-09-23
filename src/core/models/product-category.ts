@@ -14,9 +14,6 @@ export class ProductCategory {
     @Column({ unique: true })
     @ApiProperty({ description: 'Name' })
     name: string;
-
-    @ManyToOne(() => Product, (product) => product.categories)
-    product: Product;
 }
 
 export const productCategoryValidateSchema = {

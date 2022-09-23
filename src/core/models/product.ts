@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ProductCategory } from './product-category';
 import * as joi from 'joi';
 import JoiMessage from 'joi-message';
@@ -34,7 +34,7 @@ export class Product {
     @ApiProperty({ description: 'updateDate' })
     updateAt: string;
 
-    @Column()
+    @Column('longtext')
     @ApiProperty({ description: 'Image' })
     imageUrl: string;
 
@@ -47,7 +47,8 @@ export class Product {
     isSale: boolean;
 
     @ApiProperty({ description: 'Categories', nullable: true })
-    @OneToMany(() => ProductCategory, (category) => category.product)
+    @ManyToMany(() => ProductCategory)
+    @JoinTable()
     categories: ProductCategory[];
 }
 

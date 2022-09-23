@@ -17,7 +17,6 @@ export class ProductCategoryController {
     constructor(private readonly productCategoryService: ProductCategoryService) {}
 
     @Get('')
-    @UseGuards(AuthGuard)
     @UsePipes(new JoiValidatorPipe(vFilterProductCategoryDTO))
     @ApiOperation({ summary: 'Get all product category' })
     async cFilterProductCategories(@Query() queries: FilterProductCategoryDTO) {

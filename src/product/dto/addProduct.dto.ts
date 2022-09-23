@@ -1,19 +1,19 @@
-import { ApiProperty } from "@nestjs/swagger";
-import * as joi from "joi";
-import { productValidateSchema } from "src/core/models/product";
-import { File } from "winston/lib/winston/transports";
+import { ApiProperty } from '@nestjs/swagger';
+import * as joi from 'joi';
+import { productValidateSchema } from 'src/core/models/product';
+import { File } from 'winston/lib/winston/transports';
 
 export class AddProductDTO {
     @ApiProperty({ description: 'Name', example: 'The Death' })
     name: string;
-    
+
     @ApiProperty({ description: 'Price', example: 5 })
     price: number;
-    
+
     @ApiProperty({ description: 'Description', example: 'The Death' })
     description: string;
 
-    @ApiProperty({ description: 'categories', format: 'array', items: { type: 'string' }, example: ['id1','id2','or empty'] ,default:[]})
+    @ApiProperty({ description: 'categories', example: ['12', '23'] })
     categories: string[];
 
     @ApiProperty({ description: 'details', example: '<div>somthing</div>' })
@@ -25,15 +25,15 @@ export class AddProductDTO {
     @ApiProperty({ description: 'is sale', example: true })
     isSale: boolean;
 
-    @ApiProperty({ type: 'string', format: 'binary'  })   
-    image:Express.Multer.File;
+    @ApiProperty({ type: 'string', format: 'binary' })
+    image: Express.Multer.File;
 }
 
 export const vAddProductDTO = joi.object<AddProductDTO>({
     name: productValidateSchema.name,
     price: productValidateSchema.price,
     description: productValidateSchema.description,
-    categories: joi.array().items(joi.string()).failover([]),
+    categories: joi.string(),
     details: productValidateSchema.details,
     quantity: productValidateSchema.quantity,
     isSale: productValidateSchema.isSale,
