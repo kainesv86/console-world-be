@@ -6,8 +6,7 @@ import { ProductRepository } from 'src/core/repositories/product.repository';
 export class ProductService {
     constructor(private readonly productRepository: ProductRepository) {}
 
-    async createOne() {
-        // const product = new Product();
-        // return null;
+    async createOne(product: Product): Promise<Product> {
+        return this.productRepository.save(product);
     }
 }

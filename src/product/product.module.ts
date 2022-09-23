@@ -5,9 +5,11 @@ import { ProductRepository } from 'src/core/repositories/product.repository';
 import { Connection } from 'typeorm';
 import { UserModule } from 'src/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { FirebaseModule } from 'src/firebase/firebase.module';
+import { ProductCategoryModule } from 'src/product-category/product-category.module';
 
 @Module({
-    imports: [forwardRef(() => AuthModule), forwardRef(() => UserModule)],
+    imports: [forwardRef(() => AuthModule), forwardRef(() => UserModule),FirebaseModule,ProductCategoryModule],
     controllers: [ProductController],
     providers: [ProductService, { provide: ProductRepository, useFactory: (connection: Connection) => connection.getCustomRepository(ProductRepository), inject: [Connection] }],
 })
