@@ -16,7 +16,7 @@ export class UpdateProductDTO {
     price: number;
 
     @ApiProperty({ description: 'Categories', required: false, example: ['cate 1', 'cate 2'] })
-    categories: string;
+    categories: string[];
 
     @ApiProperty({ description: 'Quantity', required: false, example: '100' })
     quantity: number;
