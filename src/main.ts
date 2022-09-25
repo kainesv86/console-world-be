@@ -15,6 +15,8 @@ import * as admin from 'firebase-admin';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, { logger: new CustomLoggerService() });
+    app.setGlobalPrefix('/api');
+
     const configService: ConfigService = app.get(ConfigService);
     const adminConfig: ServiceAccount = {
         projectId: configService.get<string>('FIREBASE_PROJECT_ID'),

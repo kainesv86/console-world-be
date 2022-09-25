@@ -14,7 +14,7 @@ import { Address } from 'src/core/models/address';
 @ApiBearerAuth()
 @Controller(AddressController.endPoint)
 export class AddressController {
-    static endPoint = '/api/address';
+    static endPoint = 'address';
     constructor(private readonly addressService: AddressService) {}
 
     @Get('')

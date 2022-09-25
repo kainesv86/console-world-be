@@ -15,7 +15,7 @@ import { UserService } from './user.service';
 @ApiBearerAuth()
 @Controller(UserController.endPoint)
 export class UserController {
-    static endPoint = '/api/user';
+    static endPoint = 'user';
 
     constructor(private readonly userService: UserService, private readonly authService: AuthService) {}
 

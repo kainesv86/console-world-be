@@ -13,7 +13,7 @@ import { ProductCategoryService } from './product-category.service';
 @ApiBearerAuth()
 @Controller(ProductCategoryController.endPoint)
 export class ProductCategoryController {
-    static endPoint = 'api/product-category';
+    static endPoint = '/product-category';
     constructor(private readonly productCategoryService: ProductCategoryService) {}
 
     @Get('')

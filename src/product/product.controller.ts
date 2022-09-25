@@ -15,7 +15,7 @@ import { UpdateProductDTO, vUpdateProductDTO } from './dto/updateProduct.dto';
 @Controller(ProductController.endPoint)
 @ApiBearerAuth()
 export class ProductController {
-    static endPoint = '/api/product';
+    static endPoint = 'product';
     constructor(private readonly productService: ProductService, private readonly firebaseService: FirebaseService, private readonly productCategoryService: ProductCategoryService) {}
 
     @Post()
