@@ -7,9 +7,10 @@ import { JoiValidatorPipe } from 'src/core/pipe/validator.pipe';
 import { QueryJoiValidatorPipe } from 'src/core/pipe/queryValidator.pipe';
 
 @ApiTags('products')
-@Controller('products')
+@Controller(ProductsController.endPoint)
 @ApiBearerAuth()
 export class ProductsController {
+    static endPoint = '/api/products';
     constructor(private readonly productService: ProductService) {}
 
     @Get('')
