@@ -12,9 +12,10 @@ import { ProductCategoryService } from 'src/product-category/product-category.se
 import { UpdateProductDTO, vUpdateProductDTO } from './dto/updateProduct.dto';
 
 @ApiTags('product')
-@Controller('product')
+@Controller(ProductController.endPoint)
 @ApiBearerAuth()
 export class ProductController {
+    static endPoint = '/api/product';
     constructor(private readonly productService: ProductService, private readonly firebaseService: FirebaseService, private readonly productCategoryService: ProductCategoryService) {}
 
     @Post()
