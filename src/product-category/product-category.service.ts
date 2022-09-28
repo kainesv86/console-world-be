@@ -16,9 +16,9 @@ export class ProductCategoryService {
 
     async filterProductCategories(name: string): Promise<ProductCategory[]> {
         const query = this.productCategoryBuilder;
-        if (name) {
-            query.where('productCategory.name like :name', { name: `%${name}%` });
-        }
+      
+        query.where('productCategory.name like :name', { name: `%${name}%` });
+        
         return query.getMany();
     }
 
