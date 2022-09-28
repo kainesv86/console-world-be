@@ -20,7 +20,7 @@ export class ProductService {
 
     async filterProducts(
         name: string,
-        categories: string[],
+        categories: string | string[],
         minPrice: number,
         maxPrice: number,
         isSale: boolean,
@@ -29,15 +29,19 @@ export class ProductService {
         order: SortOrder,
     ): Promise<{ data: Product[]; count: number }> {
         try {
-            const query = this.productBuilder
+            let query = this.productBuilder
                 .where('product.name LIKE :name', { name: `%${name}%` })
                 .andWhere('product.price >= :minPrice', { minPrice })
                 .andWhere('product.price <= :maxPrice', { maxPrice })
                 .andWhere('product.isSale = :isSale', { isSale })
                 .orderBy('product.updateAt', order)
-                .andWhere('category.id IN (:...categories)', { categories })
                 .skip(currentPage * pageSize)
                 .take(pageSize);
+
+            if (categories) {
+                categories = Array.isArray(categories) ? categories : [categories];
+                query = query.andWhere('category.id IN (:...categories)', { categories });
+            }
 
             const products = await query.getMany();
             const count = await query.getCount();

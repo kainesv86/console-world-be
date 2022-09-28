@@ -12,7 +12,7 @@ export class FilterProductsDTO {
     @ApiProperty({ description: 'Max price', required: false, example: '100', nullable: true })
     maxPrice: number;
 
-    @ApiProperty({ description: 'categories', example: ['12', '23'] })
+    @ApiProperty({ description: 'categories', example: ['12', '23'], isArray: true, required: false, nullable: true })
     categories: string[];
 
     @ApiProperty({ description: 'is Sale', required: false, example: true, nullable: true })
@@ -32,7 +32,7 @@ export const vFilterProductsDTO = joi.object<FilterProductsDTO>({
     name: joi.string().failover(''),
     minPrice: joi.number().failover(0),
     maxPrice: joi.number().failover(999999),
-    categories: joi.array().items(joi.string()).failover([]),
+    categories: joi.alternatives().try(joi.array().items(joi.string()).failover([]), joi.string().failover([])),
     isSale: joi.boolean().failover(null),
     currentPage: joi.number().failover(0),
     pageSize: joi.number().failover(12),
