@@ -28,6 +28,7 @@ export class ProductService {
         pageSize: number,
         order: SortOrder,
     ): Promise<{ data: Product[]; count: number }> {
+        console.log(name, categories, minPrice, maxPrice, isSale, currentPage, pageSize, order);
         try {
             let query = this.productBuilder
                 .where('product.name LIKE :name', { name: `%${name}%` })
@@ -38,8 +39,7 @@ export class ProductService {
                 .skip(currentPage * pageSize)
                 .take(pageSize);
 
-            if (categories) {
-                categories = Array.isArray(categories) ? categories : [categories];
+            if (categories.length > 0) {
                 query = query.andWhere('category.id IN (:...categories)', { categories });
             }
 

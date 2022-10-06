@@ -29,12 +29,12 @@ export class FilterProductsDTO {
 }
 
 export const vFilterProductsDTO = joi.object<FilterProductsDTO>({
-    name: joi.string().failover(''),
-    minPrice: joi.number().failover(0),
-    maxPrice: joi.number().failover(999999),
-    categories: joi.alternatives().try(joi.array().items(joi.string()).failover([]), joi.string().failover([])),
-    isSale: joi.boolean().failover(null),
-    currentPage: joi.number().failover(0),
-    pageSize: joi.number().failover(12),
-    order: joi.string().valid('ASC', 'DESC').failover('ASC'),
+    name: joi.string().required().failover(''),
+    minPrice: joi.number().required().failover(0),
+    maxPrice: joi.number().required().failover(999999),
+    categories: joi.alternatives().required().try(joi.array().items(joi.string()).failover([]), joi.string().failover(null)),
+    isSale: joi.boolean().required().failover(null),
+    currentPage: joi.number().required().failover(0),
+    pageSize: joi.number().required().failover(12),
+    order: joi.string().valid('ASC', 'DESC').required().failover('ASC'),
 });

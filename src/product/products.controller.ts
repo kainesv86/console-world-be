@@ -19,7 +19,8 @@ export class ProductsController {
     @UsePipes(new QueryJoiValidatorPipe(vFilterProductsDTO))
     async cFilterProducts(@Query() queries: FilterProductsDTO) {
         const { name, categories, minPrice, maxPrice, isSale, currentPage, pageSize, order } = queries;
-
-        return await this.productService.filterProducts(name, categories, minPrice, maxPrice, isSale, currentPage, pageSize, order);
+        const categoriesArr: string[] = categories ? (Array.isArray(categories) ? categories : [categories]) : [];
+        console.log(categoriesArr);
+        return await this.productService.filterProducts(name, categoriesArr, minPrice, maxPrice, isSale, currentPage, pageSize, order);
     }
 }
