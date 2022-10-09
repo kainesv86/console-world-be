@@ -28,7 +28,6 @@ export class ProductService {
         pageSize: number,
         order: SortOrder,
     ): Promise<{ data: Product[]; count: number }> {
-        console.log(name, categories, minPrice, maxPrice, isSale, currentPage, pageSize, order);
         try {
             let query = this.productBuilder
                 .where('product.name LIKE :name', { name: `%${name}%` })

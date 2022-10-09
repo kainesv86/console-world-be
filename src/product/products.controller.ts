@@ -20,7 +20,6 @@ export class ProductsController {
     async cFilterProducts(@Query() queries: FilterProductsDTO) {
         const { name, categories, minPrice, maxPrice, isSale, currentPage, pageSize, order } = queries;
         const categoriesArr: string[] = categories ? (Array.isArray(categories) ? categories : [categories]) : [];
-        console.log(categoriesArr);
         return await this.productService.filterProducts(name, categoriesArr, minPrice, maxPrice, isSale, currentPage, pageSize, order);
     }
 }
