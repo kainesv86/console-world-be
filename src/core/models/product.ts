@@ -88,4 +88,10 @@ export const productValidateSchema = {
         .boolean()
         .required()
         .messages(JoiMessage.createBooleanMessages({ field: 'isSale' })),
+    categories: joi.array().items(
+        joi.object({
+            id: joi.string().required().failover(''),
+            name: joi.string().required().failover(''),
+        }),
+    ),
 };

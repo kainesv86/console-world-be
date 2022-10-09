@@ -10,6 +10,7 @@ import { JoiValidatorPipe } from 'src/core/pipe/validator.pipe';
 import { AddProductDTO, vAddProductDTO } from './dto/addProduct.dto';
 import { ProductCategoryService } from 'src/product-category/product-category.service';
 import { UpdateProductDTO, vUpdateProductDTO } from './dto/updateProduct.dto';
+import { template } from 'lodash';
 
 @ApiTags('product')
 @Controller(ProductController.endPoint)
@@ -32,13 +33,24 @@ export class ProductController {
             throw new HttpException(ResponseMessage.INVALID_CATEGORIES, StatusCodes.BAD_REQUEST);
         }
 
-        const idsArray = body.categories.toString().split(',');
+        const existCategoryIds = body.categories.filter((item) => item.id !== '').map((item) => item.id);
 
-        const categories = await this.productCategoryService.findMany(idsArray);
+        const existCategories = await this.productCategoryService.findMany(existCategoryIds);
 
-        if (idsArray.length !== categories.length) {
+        if (existCategoryIds.length !== existCategories.length) {
             throw new HttpException(ResponseMessage.INVALID_CATEGORY, StatusCodes.BAD_REQUEST);
         }
+
+        // Filter categories which non id
+        const categoryNameNonIds = body.categories.filter((item) => item.id === '').map((item) => item.name);
+
+        // Duplicate category name
+        const categoryNameIds = await this.productCategoryService.findManyByNames(categoryNameNonIds);
+
+        // New category name
+        const newCategoryNames = categoryNameNonIds.filter((item) => !categoryNameIds.map((item) => item.name).includes(item));
+
+        const newCategories = await this.productCategoryService.createMany(newCategoryNames);
 
         const imageName = await this.firebaseService.addFile(file);
         const imageUrl = await this.firebaseService.getFileUrl(imageName);
@@ -50,7 +62,7 @@ export class ProductController {
         product.price = body.price;
         product.description = body.description;
         product.details = body.details;
-        product.categories = categories;
+        product.categories = [...existCategories, ...newCategories, ...categoryNameIds];
         product.isSale = body.isSale;
         product.quantity = body.quantity;
 

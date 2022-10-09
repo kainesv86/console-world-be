@@ -14,6 +14,15 @@ export class ProductCategoryService {
         return this.productCategoryRepository.save(productCategory);
     }
 
+    async createMany(names: string[]): Promise<ProductCategory[]> {
+        const productCategories = names.map((name) => {
+            const productCategory = new ProductCategory();
+            productCategory.name = name;
+            return productCategory;
+        });
+        return this.productCategoryRepository.save(productCategories);
+    }
+
     async filterProductCategories(name: string): Promise<ProductCategory[]> {
         const query = this.productCategoryBuilder;
 
@@ -24,5 +33,9 @@ export class ProductCategoryService {
 
     async findMany(ids: string[]): Promise<ProductCategory[]> {
         return this.productCategoryBuilder.whereInIds(ids).getMany();
+    }
+
+    async findManyByNames(names: string[]): Promise<ProductCategory[]> {
+        return this.productCategoryBuilder.where('productCategory.name IN (:...names)', { names }).getMany();
     }
 }
