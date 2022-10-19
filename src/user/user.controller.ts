@@ -2,7 +2,9 @@ import { Body, Controller, Get, HttpException, Param, Put, Query, Req, Res, UseG
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { serialize } from 'src/core/interceptors/serialization.interception';
 import { ResponseMessage } from 'src/core/interface';
+import { User } from 'src/core/models';
 import { AuthGuard } from '../auth/auth.guard';
 import { AuthService } from '../auth/auth.service';
 import { constant } from '../core';
@@ -21,8 +23,9 @@ export class UserController {
 
     @Get('/me')
     @UseGuards(AuthGuard)
+    @serialize(User)
     async cGetMe(@Req() req: Request, @Res() res: Response) {
-        return res.send(req.user);
+        res.send(req.user);
     }
 
     @Put('/password')

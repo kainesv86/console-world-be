@@ -5,7 +5,7 @@ import * as joi from 'joi';
 import { Address } from './address';
 import JoiMessage from 'joi-message';
 import { ResponseMessage } from '../interface';
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 const joiPassword: JoiPasswordExtend = joi.extend(joiPasswordExtendCore);
 
@@ -30,6 +30,7 @@ export class User {
     name: string;
 
     @ApiProperty({ description: 'Password' })
+    @Exclude()
     @Column({ default: null })
     password: string;
 

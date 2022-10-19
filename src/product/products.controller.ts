@@ -1,10 +1,11 @@
 import { Controller, UseGuards, Get, Query, UsePipes } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ProductCategoryService } from 'src/product-category/product-category.service';
 import { FilterProductsDTO, vFilterProductsDTO } from './dto/filterProducts.dto';
-import { JoiValidatorPipe } from 'src/core/pipe/validator.pipe';
 import { QueryJoiValidatorPipe } from 'src/core/pipe/queryValidator.pipe';
+import { serialize } from 'src/core/interceptors/serialization.interception';
+import { Product } from 'src/core/models/product';
+import { ResponseList } from 'src/core/common/class/response.class';
 
 @ApiTags('products')
 @Controller(ProductsController.endPoint)
@@ -16,6 +17,7 @@ export class ProductsController {
     @Get('')
     @UseGuards()
     @ApiOperation({ summary: 'Get products filter' })
+    @serialize(ResponseList<Product>)
     @UsePipes(new QueryJoiValidatorPipe(vFilterProductsDTO))
     async cFilterProducts(@Query() queries: FilterProductsDTO) {
         const { name, categories, minPrice, maxPrice, isSale, currentPage, pageSize, order } = queries;

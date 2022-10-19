@@ -11,6 +11,7 @@ import { AddProductDTO, vAddProductDTO } from './dto/addProduct.dto';
 import { ProductCategoryService } from 'src/product-category/product-category.service';
 import { UpdateProductDTO, vUpdateProductDTO } from './dto/updateProduct.dto';
 import { template } from 'lodash';
+import { serialize } from 'src/core/interceptors/serialization.interception';
 
 @ApiTags('product')
 @Controller(ProductController.endPoint)
@@ -24,6 +25,7 @@ export class ProductController {
     @ApiConsumes('multipart/form-data')
     @UseInterceptors(FileInterceptor('image'))
     @ApiOperation({ summary: 'Create product' })
+    @serialize(Product)
     async cCreateProduct(@Body(new JoiValidatorPipe(vAddProductDTO)) body: AddProductDTO, @UploadedFile() file: Express.Multer.File) {
         if (!file) {
             throw new HttpException(ResponseMessage.INVALID_IMAGE, StatusCodes.BAD_REQUEST);
@@ -76,6 +78,7 @@ export class ProductController {
     @Get('/:id')
     @UseGuards()
     @ApiOperation({ summary: 'Get product by id' })
+    @serialize(Product)
     async cGetProduct(@Param('id') id: string) {
         const product = await this.productService.getOneByField('id', id);
 

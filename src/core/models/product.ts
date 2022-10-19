@@ -3,6 +3,7 @@ import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColum
 import { ProductCategory } from './product-category';
 import * as joi from 'joi';
 import JoiMessage from 'joi-message';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Product {
@@ -27,10 +28,12 @@ export class Product {
     price: number;
 
     @Column()
+    @Exclude()
     @ApiProperty({ description: 'createDate' })
     createAt: string;
 
     @Column()
+    @Exclude()
     @ApiProperty({ description: 'updateDate' })
     updateAt: string;
 
